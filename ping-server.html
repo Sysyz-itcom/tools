@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft服务器查询工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://sysyz-itcom.github.io/start/img/background5.webp');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.09);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 90%;
+      margin: 20px auto;
+      backdrop-filter: blur(80px);
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 style="text-align: center;">服务器状态查询</h1>
+    <p style="text-align: center;">请不要输入带有"http://"或"https://"的链接</p>
+    <input type="text" id="serverInput" placeholder="请输入Minecraft服务器链接">
+    <br> <!-- 按钮换行 -->
+    <button onclick="pingServer()">测试</button>
+    <textarea id="output" placeholder="输出结果将在此显示" readonly></textarea>
+  </div>
+
+  <script>
+    function pingServer() {
+      var serverUrl = document.getElementById('serverInput').value.trim();
+      if (!serverUrl) {
+        alert('请输入正确的Minecraft服务器链接！');
+        return;
+      }
+
+      var apiUrl = 'https://api.beijing.mingpixel.site/ping.php?server=' + encodeURIComponent(serverUrl);
+
+      // 发送GET请求
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('网络请求出错');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // 将JSON数据显示在输出框中，格式化显示
+          document.getElementById('output').value = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          // 将错误信息显示在输出框中
+          document.getElementById('output').value = '获取数据失败: ' + error.message;
+        });
+    }
+  </script>
+
+</body>
+
+</html>

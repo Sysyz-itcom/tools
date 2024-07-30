@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Adb 在线执行器</title>
+    <link href="https://sysyz-itcom.github.io/tools/adb-online/favicon.ico" rel="shortcut icon">
+    <script type="module" crossorigin src="https://sysyz-itcom.github.io/tools/adb-online/index.js"></script>
+    <link rel="stylesheet" crossorigin href="https://sysyz-itcom.github.io/tools/adb-online/index.css">
+</head>
+
+<body>
+    <div class="container pt-5">
+        <div class="row justify-content-center gy-2" x-cloak x-data="ADB">
+            <div class="col-sm-10 col-md-8 col-lg-5">
+                <h3>ADB在线执行工具 <span class="badge bg-secondary">BETA</span></h3>
+                <div class="alert alert-danger mb-2" x-show="!isSupported()">此浏览器不支持 WebUSB API，请使用最新版本 <a
+                        href="https://www.google.cn/intl/zh-CN/chrome/">Chrome 浏览器</a></div><template x-if="message">
+                    <div class="alert alert-secondary mb-2"><span x-text="message"></span></div>
+                </template><template x-if="result">
+                    <div @closed-bs-alert.dot.once="result = null;"
+                        class="alert alert-primary alert-dismissible fade show mb-2"><span x-text="result"></span>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert"></button></div>
+                </template>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row gx-3 gy-2 pb-3">
+                            <div class="col-md-8"><select :disabled="processing" aria-label="choose app"
+                                    class="form-select shadow-none" x-model="checked"><template
+                                        x-for="(shell, index) in shells">
+                                        <option :selected="index === 0" :value="index" x-text="shell.name"></option>
+                                    </template></select></div>
+                            <div class="col-md-4"><button class="btn btn-primary w-100 shadow-none"
+                                    :data-loading="processing" :class="processing ? 'btn-danger' : 'btn-primary'"
+                                    @click="processing ? stop() : active()"
+                                    x-text="processing ? '停止' : '点击激活'">点击激活</button></div><small
+                                class="text-muted">当前设备： <label x-text="productName"></label><template
+                                    x-if="supportForget"><button :disabled="processing" @click="forget()"
+                                        class="btn btn-sm btn-link">忘记此设备</button></template></small>
+                        </div><template x-if="!!shellShow">
+                            <div><small>将执行以下命令<br></small><code class="text-break" x-text="shellShow"></code></div>
+                        </template><template x-if="!shellShow">
+                            <div class="form-floating"><input :disabled="processing" @keydown.enter="active()"
+                                    class="form-control shadow-none" id="shell" placeholder="shell" required
+                                    x-model="shell" x-ref="shell"> <label for="shell">输入非交互型指令，如：uname -a</label></div>
+                        </template>
+                    </div>
+                </div>
+                <div class="py-5 small text-center text-muted">
+                    <div>Windows：请为 ADB 安装 <a href="https://developer.android.google.cn/studio/run/oem-usb"
+                            target="_blank">驱动程序</a><br>Ubuntu：请配置 <a target="_blank"
+                            href="https://developer.android.google.cn/studio/run/device">udev 规则</a><br>暂不支持移动设备</div>
+                    <div class="font-monospace pt-3"><span>© 2024 邵阳市第一中学信息技术社团</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

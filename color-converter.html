@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色值转换器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .radio-group {
+            margin: 10px 0;
+            text-align: left;
+        }
+        .radio-group label {
+            display: block;
+            padding: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>颜色值转换器</h2>
+        <input type="text" id="inputColor" placeholder="输入一个色值，然后开始转换">
+
+        <div class="radio-group">
+            <label>
+                <input type="radio" id="hex" name="format" value="hex" checked>
+                Hexadecimal
+            </label>
+            <label>
+                <input type="radio" id="rgb" name="format" value="rgb">
+                RGB
+            </label>
+            <label>
+                <input type="radio" id="hsl" name="format" value="hsl">
+                HSL
+            </label>
+            <label>
+                <input type="radio" id="name" name="format" value="name">
+                CSS Name
+            </label>
+        </div>
+
+        <button onclick="convertColor()">转换</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convertColor() {
+            const inputColor = document.getElementById('inputColor').value.trim();
+            const format = document.querySelector('input[name="format"]:checked').value;
+            let result;
+
+            try {
+                switch(format) {
+                    case 'hex':
+                        result = toHex(inputColor);
+                        break;
+                    case 'rgb':
+                        result = toRgb(inputColor);
+                        break;
+                    case 'hsl':
+                        result = toHsl(inputColor);
+                        break;
+                    case 'name':
+                        result = toCssName(inputColor);
+                        break;
+                }
+            } catch (e) {
+                result = 'Invalid input';
+            }
+
+            document.getElementById('result').innerText = `Result: ${result}`;
+        }
+
+        function toHex(color) {
+            let ctx = new Option().style;
+            ctx.color = color;
+            return ctx.color ? getComputedStyle(ctx).color.match(/\d+/g).reduce((acc, val, i) =>
+                acc + parseInt(val).toString(16).padStart(2, '0'), '#') : 'Invalid color';
+        }
+
+        function toRgb(color) {
+            let ctx = new Option().style;
+            ctx.color = color;
+            return ctx.color ? getComputedStyle(ctx).color : 'Invalid color';
+        }
+
+        function toHsl(color) {
+            let ctx = new Option().style;
+            ctx.color = color;
+            if (!ctx.color) return 'Invalid color';
+            let rgb = getComputedStyle(ctx).color.match(/\d+/g).map(Number);
+            let r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255;
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+        }
+
+        function toCssName(color) {
+            let ctx = new Option().style;
+            ctx.color = color;
+            return ctx.color ? color : 'Invalid color';
+        }
+    </script>
+</body>
+</html>

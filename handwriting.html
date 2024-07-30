@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写文字生成器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://sysyz-itcom.github.io/start/img/background3.webp');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(80px);
+    }
+
+    .container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.5);
+      /* 半透明白色背景 */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      /* 阴影效果 */
+      max-width: 600px;
+      /* 最大宽度限制 */
+      width: 90%;
+      /* 宽度自适应 */
+      margin: 0 10px;
+      /* 左右增加适量空白 */
+      box-sizing: border-box;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      /* 宽度自适应 */
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      /* 居中显示 */
+      margin-top: 10px;
+      /* 按钮顶部间距 */
+      width: 100%;
+      /* 宽度自适应 */
+      box-sizing: border-box;
+      max-width: 300px;
+      /* 最大宽度限制 */
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+        margin: 0 5px;
+        /* 在小屏幕上减少外边距 */
+      }
+
+      input[type="text"],
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <input type="text" id="textInput" placeholder="请输入要生成的文字">
+    <button onclick="generateImage()">生成</button>
+  </div>
+
+  <script>
+    function generateImage() {
+      var inputText = document.getElementById('textInput').value;
+      if (inputText.trim() === '') {
+        alert('请输入要生成的文字！');
+        return;
+      }
+
+      var url = 'https://dataiqs.com/api/handwriting/?msg=' + encodeURIComponent(inputText);
+      window.open(url, '_blank');
+    }
+  </script>
+
+</body>
+
+</html>

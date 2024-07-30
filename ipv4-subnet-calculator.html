@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv4子网计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>IPv4子网计算器</h2>
+        <input type="text" id="cidrInput" placeholder="Enter CIDR block (e.g., 192.168.0.0/24)">
+        <button onclick="calculateSubnet()">开始计算</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateSubnet() {
+            const cidrInput = document.getElementById('cidrInput').value.trim();
+            const cidrParts = cidrInput.split('/');
+            
+            if (cidrParts.length !== 2) {
+                showError('Invalid CIDR format. Please use format like 192.168.0.0/24');
+                return;
+            }
+
+            const ipAddress = cidrParts[0];
+            const subnetMaskLength = parseInt(cidrParts[1], 10);
+
+            if (subnetMaskLength < 0 || subnetMaskLength > 32) {
+                showError('Subnet mask length must be between 0 and 32.');
+                return;
+            }
+
+            // Calculate subnet details
+            const subnetDetails = calculateSubnetDetails(ipAddress, subnetMaskLength);
+
+            // Display result
+            displayResult(subnetDetails);
+        }
+
+        function calculateSubnetDetails(ipAddress, subnetMaskLength) {
+            const ipParts = ipAddress.split('.').map(part => parseInt(part, 10));
+            const subnetMask = generateSubnetMask(subnetMaskLength);
+
+            // Calculate network address
+            const networkAddress = ipParts.map((part, index) => part & subnetMask[index]).join('.');
+
+            // Calculate first and last usable IP addresses
+            const firstUsableIP = networkAddress.substring(0, networkAddress.lastIndexOf('.') + 1) + (parseInt(networkAddress.substr(networkAddress.lastIndexOf('.') + 1)) + 1);
+            const lastUsableIP = networkAddress.substring(0, networkAddress.lastIndexOf('.') + 1) + (parseInt(networkAddress.substr(networkAddress.lastIndexOf('.') + 1)) + Math.pow(2, 32 - subnetMaskLength) - 2);
+
+            // Calculate broadcast address
+            const broadcastAddress = ipParts.map((part, index) => part | ~subnetMask[index] & 0xFF).join('.');
+
+            // Calculate number of usable IP addresses
+            const numIPs = Math.pow(2, 32 - subnetMaskLength) - 2;
+
+            return {
+                NetworkAddress: networkAddress,
+                FirstUsableIP: firstUsableIP,
+                LastUsableIP: lastUsableIP,
+                BroadcastAddress: broadcastAddress,
+                SubnetMask: subnetMask.join('.'),
+                NumIPs: numIPs
+            };
+        }
+
+        function generateSubnetMask(subnetMaskLength) {
+            let subnetMask = [0, 0, 0, 0];
+            for (let i = 0; i < subnetMaskLength; i++) {
+                subnetMask[Math.floor(i / 8)] += 1 << (7 - i % 8);
+            }
+            return subnetMask;
+        }
+
+        function displayResult(subnetDetails) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <p><strong>Network Address:</strong> ${subnetDetails.NetworkAddress}</p>
+                <p><strong>First Usable IP:</strong> ${subnetDetails.FirstUsableIP}</p>
+                <p><strong>Last Usable IP:</strong> ${subnetDetails.LastUsableIP}</p>
+                <p><strong>Broadcast Address:</strong> ${subnetDetails.BroadcastAddress}</p>
+                <p><strong>Subnet Mask:</strong> ${subnetDetails.SubnetMask}</p>
+                <p><strong>Number of Usable IPs:</strong> ${subnetDetails.NumIPs}</p>
+            `;
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p style="color: red;">${message}</p>`;
+        }
+    </script>
+</body>
+</html>

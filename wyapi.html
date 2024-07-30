@@ -1,0 +1,145 @@
+<!-- 解析接口来自：https://dataiqs.com -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="免费网易云音乐解析下载工具。网易云音乐解析，网易云音乐下载，网易云音乐解析下载，解析工具">
+    <title>网易云音乐解析</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://sysyz-itcom.github.io/start/img/background10.webp');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* 高斯模糊效果 */
+            backdrop-filter: blur(80px);
+            /* 高斯模糊 */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            /* 添加外边距 */
+            color: #333;
+            /* 修改文本颜色为深灰色 */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+        }
+
+        h6 {
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            /* 响应区域背景色 */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            overflow: auto;
+            /* 添加滚动条 */
+            max-height: 200px;
+            /* 最大高度，超出部分会出现滚动条 */
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 90%;
+                max-width: 400px;
+                margin: 10px;
+                /* 在小屏幕上增加外边距 */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>网易云音乐解析</h2>
+        <p>请在输入框中输入歌曲链接中“?id=”的后缀部分</p>
+        <h6>标红的部分为歌曲ID：https://music.163.com/#/song?id=<span style="color: red;">2091987434</span><br>若解析成功，请复制“song_url”后面的链接到新页面打开
+        </h6>
+        <input type="text" id="songId" placeholder="请输入歌曲ID">
+        <button onclick="fetchMusic()">获取下载链接</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        function fetchMusic() {
+            var songId = document.getElementById('songId').value.trim();
+            if (!songId) {
+                alert('请输入有效的歌曲ID');
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        displayResponse(response);
+                    } else {
+                        displayResponse({ code: xhr.status, text: '请求失败' });
+                    }
+                }
+            };
+            xhr.open('GET', 'https://dataiqs.com/api/netease/music/?type=songid&id=' + songId, true);
+            xhr.send();
+        }
+
+        function displayResponse(response) {
+            var responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = '<pre>' + JSON.stringify(response, null, 2) + '</pre>';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown-1.0.2.20240501</title>
+    <link href="https://cdn.bootcss.com/simplemde/1.11.2/simplemde.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/highlight.js/9.13.0/styles/github-gist.min.css" rel="stylesheet">
+    <style>
+        #editor-container {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffffff; /* 白色 */
+            color: #000000; /* 黑色 */
+            border: 1px solid #cccccc; /* 浅灰色 */
+            border-radius: 5px;
+            transition: box-shadow 0.3s ease;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* 内嵌阴影效果 */
+        }
+    </style>
+</head>
+<body>
+<div id="editor-container">
+    <textarea></textarea>
+</div>
+<button id="saveButton" class="button">保存</button>
+<a id="downloadLink" style="display: none"></a>
+<script src="https://cdn.bootcss.com/simplemde/1.11.2/simplemde.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.13.1/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/markdown-it/12.0.4/markdown-it.min.js"></script>
+<script>
+    var simplemde = new SimpleMDE({
+        element: document.querySelector('textarea'),
+        autoDownloadFontAwesome:false,
+        autofocus:true,
+        autosave: {
+            enabled: true,
+            uniqueId: "SimpleMDE",
+            delay: 1000,
+        },
+        blockStyles: {
+            bold: "**",
+            italic: "*",
+            code: "```"
+        },
+        forceSync: true,
+        hideIcons: false,
+        indentWithTabs: true,
+        lineWrapping: true,
+        renderingConfig:{
+            singleLineBreaks: false,
+            codeSyntaxHighlighting: true
+        },
+        showIcons: true,
+        spellChecker: true
+    });
+
+    // 默认开启预览模式
+    simplemde.toggleSideBySide();
+
+    // 添加保存按钮点击事件
+    document.getElementById('saveButton').addEventListener('click', function() {
+        // 获取编辑器内容
+        var markdownContent = simplemde.value();
+        
+        // 将 Markdown 内容保存到本地文件
+        saveToFile(markdownContent);
+    });
+    
+    // 将 Markdown 内容保存到本地文件
+    function saveToFile(content) {
+        var blob = new Blob([content], { type: 'text/markdown' });
+        var url = URL.createObjectURL(blob);
+        var link = document.getElementById('downloadLink');
+        link.href = url;
+        link.download = 'markdown_content.md';
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+</script>
+</body>
+</html>

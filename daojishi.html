@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>倒计时</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            user-select: none; /* 禁止文字选择 */
+            -webkit-user-select: none; /* 兼容性：禁止文字选择 */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .timer-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .timer-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .timer-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .timer-button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .timer-button:hover {
+            background-color: #e2e2e2;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .end-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff6767;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .end-button:hover {
+            background-color: #ff4f4f;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="timer-card">
+        <h1 class="timer-title">计时器</h1>
+
+        <div class="timer-buttons">
+            <button class="timer-button" data-time="300">5分钟</button>
+            <button class="timer-button" data-time="600">10分钟</button>
+            <button class="timer-button" data-time="900">15分钟</button>
+            <button class="timer-button" data-time="1200">20分钟</button>
+            <button class="timer-button" data-time="2100">35分钟</button>
+            <button class="timer-button" data-time="2400">40分钟</button>
+            <button class="timer-button" data-time="2700">45分钟</button>
+            <button class="timer-button" data-time="3000">50分钟</button>
+            <button class="timer-button" data-time="3300">55分钟</button>
+            <button class="timer-button" data-time="3600">60分钟</button>
+            <button class="timer-button" data-time="7200">120分钟</button>
+            <button class="timer-button" data-time="10800">180分钟</button>
+        </div>
+
+        <div class="timer-display">00:00</div>
+
+        <button class="end-button">结束计时</button>
+    </div>
+</div>
+
+<script>
+    let countdown;
+    let startTime;
+    let endTime;
+    const timerDisplay = document.querySelector('.timer-display');
+    const buttons = document.querySelectorAll('.timer-button');
+    const endButton = document.querySelector('.end-button');
+
+    function timer(seconds) {
+        clearInterval(countdown);
+
+        startTime = Date.now();
+        endTime = startTime + seconds * 1000;
+
+        displayTimeLeft(seconds);
+
+        countdown = setInterval(() => {
+            const timeRemaining = Math.round((endTime - Date.now()) / 1000);
+
+            if (timeRemaining <= 0) {
+                clearInterval(countdown);
+                displayTimeLeft(0);
+                return;
+            }
+
+            displayTimeLeft(timeRemaining);
+        }, 1000);
+    }
+
+    function displayTimeLeft(seconds) {
+        if (seconds === 0) {
+            timerDisplay.textContent = '00:00';
+        } else {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSeconds = seconds % 60;
+            const display = `${padZero(minutes)}:${padZero(remainderSeconds)}`;
+            timerDisplay.textContent = display;
+        }
+    }
+
+    function padZero(num) {
+        return num < 10 ? `0${num}` : num;
+    }
+
+    buttons.forEach(button => button.addEventListener('click', startTimer));
+    endButton.addEventListener('click', endTimer);
+
+    function startTimer() {
+        const seconds = parseInt(this.dataset.time);
+        timer(seconds);
+    }
+
+    function endTimer() {
+        clearInterval(countdown);
+        displayTimeLeft(0);
+    }
+</script>
+</body>
+</html>
