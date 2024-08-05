@@ -1,3 +1,4 @@
+<!-- 天气数据源自 OpenWeather，目前仅支持邵阳。-->
 <html>
 <head>
   <title>快捷工具面板</title>
@@ -339,6 +340,11 @@
         grid-template-rows: repeat(6, 1fr);
       }
     }
+
+    .weather-info .location {
+      font-size: 50px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -357,9 +363,9 @@
     <div class="card">
       <h2>天气</h2>
       <div class="app-content weather">
-        <div class="weather-icon">NaN</div>
-        <div class="temperature">---</div>
-        <div class="description">数据无效</div>
+        <div class="location"><strong><span id="location"></span></strong></div>
+        <div class="temperature"><span id="temperature"></span> °C</div>
+        <div class="description"><span id="description"></span></div>
       </div>
     </div>
 
@@ -471,7 +477,7 @@
       }
 
       setInterval(updateClock, 1000);
-      updateClock(); 
+      updateClock(); // Initial call to display time immediately
 
       // Calendar
       function generateCalendar() {
@@ -502,7 +508,6 @@
 
       generateCalendar();
 
-      // Timer
       let timerInterval;
       let timerSeconds = 0;
       const timerDisplay = document.querySelector('.timer-display');
@@ -535,7 +540,6 @@
         updateTimerDisplay();
       });
 
-      // Calculator Functionality
       const display = document.querySelector('.calculator .display');
       const buttons = document.querySelectorAll('.calculator button');
       let currentValue = '0';
@@ -593,7 +597,6 @@
         });
       });
 
-      // Drawing App Functionality
       const canvas = document.getElementById('canvas');
       const ctx = canvas.getContext('2d');
       const colorPicker = document.getElementById('color-picker');
@@ -645,6 +648,27 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       });
     });
+
+    const apiKey = '589658c57e30103630480b0a6f31c779';
+    const city = 'Shaoyang';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        const location = data.name;
+        const temperature = Math.round(data.main.temp);
+        const description = data.weather[0].description;
+
+        document.getElementById('location').textContent = location;
+        document.getElementById('temperature').textContent = temperature;
+        document.getElementById('description').textContent = description;
+      })
+      .catch(error => {
+        console.log('Error fetching weather data:', error);
+        alert('现在无法获取天气数据，请稍后再试。');
+      });
   </script>
 </body>
 
