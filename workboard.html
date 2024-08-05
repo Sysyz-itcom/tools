@@ -1,0 +1,651 @@
+<html>
+<head>
+  <title>快捷工具面板</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #a29bfe;
+      --text-color: #2d3436;
+      --bg-color: #f5f6fa;
+      --card-bg: #ffffff;
+      --card-border-radius: 15px;
+      --transition: all 0.3s ease;
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      width: 95%;
+      height: 90vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--card-border-radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      transition: var(--transition);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h2 {
+      margin: 0 0 15px 0;
+      color: var(--primary-color);
+      font-size: 1.2em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .app-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      font-size: 0.9em;
+    }
+
+    .calendar-day {
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 5px;
+    }
+
+    .calendar-header {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .calendar-current-date {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: bold;
+    }
+
+    .notes-content {
+      background-color: rgba(108, 92, 231, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      height: calc(100% - 20px);
+      overflow-y: auto;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    .timer {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .timer-display {
+      font-size: 3em;
+      margin: 20px 0;
+      font-weight: 300;
+      color: var(--primary-color);
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .timer-controls button,
+    .drawing-controls button,
+    #clear-canvas {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: var(--transition);
+      flex-grow: 1;
+      margin: 0 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .timer-controls button:hover,
+    .drawing-controls button:hover,
+    #clear-canvas:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .weather {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+    }
+
+    .weather-icon {
+      font-size: 4em;
+      margin: 10px 0;
+    }
+
+    .temperature {
+      font-size: 2.5em;
+      font-weight: 300;
+      margin: 10px 0;
+      color: var(--primary-color);
+    }
+
+    .description {
+      font-size: 1.2em;
+      color: var(--secondary-color);
+    }
+
+    .calculator {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      height: 100%;
+    }
+
+    .calculator button {
+      background-color: #f1f2f6;
+      border: none;
+      padding: 10px 0;
+      font-size: 1em;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-color);
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .calculator button:hover {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .calculator .display {
+      grid-column: 1 / -1;
+      background-color: #dfe4ea;
+      padding: 10px;
+      text-align: right;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      font-weight: 300;
+      color: var(--primary-color);
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .calculator .operator {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .drawing-app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
+    #canvas {
+      border: 2px solid var(--secondary-color);
+      background-color: white;
+      width: 100%;
+      height: calc(100% - 50px);
+      border-radius: 10px;
+    }
+
+    .drawing-controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    #color-picker {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .page-arrow {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .page-arrow:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .clock-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s;
+    }
+
+    .clock-page.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .clock {
+      font-size: 6em;
+      color: var(--primary-color);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="theme-toggle" id="theme-toggle">切换模式</button>
+  <button class="page-arrow" id="page-toggle">➡️</button>
+
+  <main class="dashboard">
+    <div class="card">
+      <h2>日历</h2>
+      <div class="app-content calendar" id="calendar">
+
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>天气</h2>
+      <div class="app-content weather">
+        <div class="weather-icon">NaN</div>
+        <div class="temperature">---</div>
+        <div class="description">数据无效</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>便利贴</h2>
+      <div class="app-content">
+        <div class="notes-content" contenteditable="true">
+          写点什么……
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>计时器</h2>
+      <div class="app-content timer">
+        <div class="timer-display">00:00:00</div>
+        <div class="timer-controls">
+          <button id="start-timer">开始</button>
+          <button id="pause-timer">暂停</button>
+          <button id="reset-timer">清除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>画板</h2>
+      <div class="app-content drawing-app">
+        <canvas id="canvas"></canvas>
+        <div class="drawing-controls">
+          <input type="color" id="color-picker" value="#6c5ce7">
+          <button id="clear-canvas">清空</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>计算器</h2>
+      <div class="app-content calculator">
+        <div class="display">0</div>
+        <button class="clear">C</button>
+        <button class="operator">±</button>
+        <button class="operator">%</button>
+        <button class="operator">÷</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="operator">×</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="operator">-</button>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button class="operator">+</button>
+        <button class="zero">0</button>
+        <button>.</button>
+        <button class="operator">=</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="clock-page" id="clock-page">
+    <div class="clock" id="clock"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const pageToggle = document.getElementById('page-toggle');
+      const dashboard = document.querySelector('.dashboard');
+      const clockPage = document.getElementById('clock-page');
+      const root = document.documentElement;
+      let isDarkTheme = false;
+      let isClockPage = false;
+
+      themeToggle.addEventListener('click', () => {
+        isDarkTheme = !isDarkTheme;
+        if (isDarkTheme) {
+          root.style.setProperty('--bg-color', '#2d3436');
+          root.style.setProperty('--card-bg', '#34495e');
+          root.style.setProperty('--text-color', '#f5f6fa');
+        } else {
+          root.style.setProperty('--bg-color', '#f5f6fa');
+          root.style.setProperty('--card-bg', '#ffffff');
+          root.style.setProperty('--text-color', '#2d3436');
+        }
+      });
+
+      pageToggle.addEventListener('click', () => {
+        isClockPage = !isClockPage;
+        if (isClockPage) {
+          dashboard.style.display = 'none';
+          clockPage.classList.add('active');
+          pageToggle.innerHTML = '⬅️';
+        } else {
+          dashboard.style.display = 'grid';
+          clockPage.classList.remove('active');
+          pageToggle.innerHTML = '➡️';
+        }
+      });
+
+      function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock(); 
+
+      // Calendar
+      function generateCalendar() {
+        const calendarElement = document.getElementById('calendar');
+        const currentDate = new Date();
+        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+        const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+
+        let calendarHTML = '';
+
+        daysOfWeek.forEach(day => {
+          calendarHTML += `<div class="calendar-day calendar-header">${day}</div>`;
+        });
+
+        for (let i = 0; i < firstDay.getDay(); i++) {
+          calendarHTML += '<div class="calendar-day"></div>';
+        }
+
+        for (let i = 1; i <= lastDay.getDate(); i++) {
+          const cellClass = i === currentDate.getDate() ? 'calendar-day calendar-current-date' : 'calendar-day';
+          calendarHTML += `<div class="${cellClass}">${i}</div>`;
+        }
+
+        calendarElement.innerHTML = calendarHTML;
+      }
+
+      generateCalendar();
+
+      // Timer
+      let timerInterval;
+      let timerSeconds = 0;
+      const timerDisplay = document.querySelector('.timer-display');
+      const startTimerBtn = document.getElementById('start-timer');
+      const pauseTimerBtn = document.getElementById('pause-timer');
+      const resetTimerBtn = document.getElementById('reset-timer');
+
+      function updateTimerDisplay() {
+        const hours = Math.floor(timerSeconds / 3600);
+        const minutes = Math.floor((timerSeconds % 3600) / 60);
+        const seconds = timerSeconds % 60;
+        timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
+
+      startTimerBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          updateTimerDisplay();
+        }, 1000);
+      });
+
+      pauseTimerBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+      });
+
+      resetTimerBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        timerSeconds = 0;
+        updateTimerDisplay();
+      });
+
+      // Calculator Functionality
+      const display = document.querySelector('.calculator .display');
+      const buttons = document.querySelectorAll('.calculator button');
+      let currentValue = '0';
+      let previousValue = null;
+      let operation = null;
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const value = button.textContent;
+
+          if (value >= '0' && value <= '9') {
+            if (currentValue === '0') {
+              currentValue = value;
+            } else {
+              currentValue += value;
+            }
+          } else if (value === '.') {
+            if (!currentValue.includes('.')) {
+              currentValue += '.';
+            }
+          } else if (value === 'C') {
+            currentValue = '0';
+            previousValue = null;
+            operation = null;
+          } else if (value === '±') {
+            currentValue = (parseFloat(currentValue) * -1).toString();
+          } else if (value === '%') {
+            currentValue = (parseFloat(currentValue) / 100).toString();
+          } else if ('+-×÷'.includes(value)) {
+            previousValue = currentValue;
+            currentValue = '0';
+            operation = value;
+          } else if (value === '=') {
+            if (previousValue && operation) {
+              switch (operation) {
+                case '+':
+                  currentValue = (parseFloat(previousValue) + parseFloat(currentValue)).toString();
+                  break;
+                case '-':
+                  currentValue = (parseFloat(previousValue) - parseFloat(currentValue)).toString();
+                  break;
+                case '×':
+                  currentValue = (parseFloat(previousValue) * parseFloat(currentValue)).toString();
+                  break;
+                case '÷':
+                  currentValue = (parseFloat(previousValue) / parseFloat(currentValue)).toString();
+                  break;
+              }
+              previousValue = null;
+              operation = null;
+            }
+          }
+
+          display.textContent = currentValue;
+        });
+      });
+
+      // Drawing App Functionality
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const colorPicker = document.getElementById('color-picker');
+      const clearBtn = document.getElementById('clear-canvas');
+      let isDrawing = false;
+
+      function resizeCanvas() {
+        const drawingApp = document.querySelector('.drawing-app');
+        canvas.width = drawingApp.offsetWidth - 2; 
+        canvas.height = drawingApp.offsetHeight - 52; 
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+
+      function startDrawing(e) {
+        isDrawing = true;
+        draw(e);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = colorPicker.value;
+
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+        ctx.beginPath();
+      }
+
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+    });
+  </script>
+</body>
+
+</html>
