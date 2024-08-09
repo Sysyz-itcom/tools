@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>随机数生成器</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+		}
+		.box {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 80vw;
+			max-width: 400px;
+			height: 80vw;
+			max-height: 400px;
+			background-color: #fff;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			font-size: 5rem;
+			text-align: center;
+			margin-bottom: 2rem;
+		}
+		.button {
+			display: block;
+			width: 80vw;
+			max-width: 400px;
+			height: 50px;
+			background-color: #2196F3;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			font-size: 1.5rem;
+			text-align: center;
+			text-decoration: none;
+			line-height: 50px;
+			transition: background-color 0.3s ease;
+		}
+		.button:hover {
+			background-color: #0F4C81;
+		}
+		.setting {
+			position: fixed;
+			right: 2rem;
+			bottom: 2rem;
+			width: 50px;
+			height: 50px;
+			background-color: #2196F3;
+			border-radius: 50%;
+			color: #fff;
+			font-size: 1.5rem;
+			text-align: center;
+			line-height: 50px;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			transition: background-color 0.3s ease;
+		}
+		.setting:hover {
+			background-color: #0F4C81;
+		}
+		.overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1;
+		}
+		.modal {
+			background-color: #fff;
+			padding: 2rem;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			max-width: 400px;
+			width: 80vw;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		label {
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		input {
+			width: 100%;
+			padding: 0.5rem;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			margin-bottom: 1rem;
+		}
+		button {
+			background-color: #2196F3;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			padding: 0.5rem 1rem;
+			font-size: 1.2rem;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+		button:hover {
+			background-color: #0F4C81;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box">
+			<span id="number">0</span>
+		</div>
+		<a href="#" class="button" onclick="generateNumber()">生成随机数</a>
+	</div>
+	<div class="setting" onclick="openSettings()">
+		<i class="fas fa-cog"></i>
+	</div>
+
+	<div class="overlay" id="settings-overlay" style="display: none;">
+		<div class="modal">
+			<h2>设置</h2>
+			<form id="settings-form">
+				<label for="min">最小值:</label>
+				<input type="number" id="min" name="min" required>
+
+				<label for="max">最大值:</label>
+				<input type="number" id="max" name="max" required>
+
+				<button type="submit">保存</button>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		let min = 1;
+		let max = 100;
+		let intervalId;
+
+		function generateNumber() {
+			const numberEl = document.getElementById('number');
+			const buttonEl = document.querySelector('.button');
+			
+			if (!intervalId) {
+				intervalId = setInterval(function() {
+					const randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
+					numberEl.innerText = randomNumber;
+				}, 25);
+				
+				buttonEl.innerText = "停止生成";
+			} else {
+				clearInterval(intervalId);
+				intervalId = null;
+				
+				buttonEl.innerText = "生成随机数";
+			}
+		}
+
+		function openSettings() {
+			const overlayEl = document.getElementById('settings-overlay');
+			overlayEl.style.display = 'flex';
+
+			const minInput = document.getElementById('min');
+			minInput.value = min;
+
+			const maxInput = document.getElementById('max');
+			maxInput.value = max;
+
+			const form = document.getElementById('settings-form');
+			form.addEventListener('submit', function(e) {
+				e.preventDefault();
+				const newMax = parseInt(maxInput.value);
+				const newMin = parseInt(minInput.value);
+				if (newMax > newMin) {
+					max = newMax;
+					min = newMin;
+					overlayEl.style.display = 'none';
+				} else {
+					alert('最大值必须大于最小值');
+				}
+			});
+		}
+	</script>
+</body>
+</html>
