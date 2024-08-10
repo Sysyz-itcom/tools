@@ -1,0 +1,22 @@
+body {
+  margin: 20px;
+}
+
+.page-container {
+  margin-top: 15px;
+  display: flex;
+}
+
+.page-left,
+.page-right {
+  padding: 0 10px; /* 左右内边距均为10像素 */
+  flex: 1;
+}
+
+.page-left {
+  margin-right: 10px; /* 左侧间距为10像素 */
+}
+
+.page-right {
+  margin-left: 10px; /* 右侧间距为10像素 */
+}
