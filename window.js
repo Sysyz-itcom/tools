@@ -8,7 +8,7 @@ function showrth(){
 			closeBtn: 0,
 			shadeClose: true,
 			time: 2000,
-			content: '<div style="padding:20px;"><h2 style="color: #01b3eb;">特别提示</h2><h4>由于此网站部署服务商 - 热铁盒的限制</h4><h4>无法在此站加载服务器 Logo 图片</h4><h4>我们正在尝试修复该问题！</h4></div>'
+			content: '<div style="padding:20px;"><h2 style="color: #01b3eb;">特别提示</h2><h4>上游服务出现问题</h4><h4>解析接口可能出现异常。</h4><h4>我们正在尝试修复该问题！</h4></div>'
 		})
 	})
 }
