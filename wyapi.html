@@ -109,7 +109,7 @@
         </h6>
         <input type="text" id="songId" placeholder="请输入歌曲ID">
         <button onclick="fetchMusic()">获取下载链接</button>
-        <div id="response"></div>
+        <div id="response">上游服务故障，请稍后重试</div>
     </div>
 
     <script>
@@ -120,7 +120,7 @@
                 return;
             }
 
-            var xhr = new XMLHttpRequest();
+            <!-- var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
@@ -138,7 +138,7 @@
         function displayResponse(response) {
             var responseDiv = document.getElementById('response');
             responseDiv.innerHTML = '<pre>' + JSON.stringify(response, null, 2) + '</pre>';
-        }
+        } -->
     </script>
 </body>
 
