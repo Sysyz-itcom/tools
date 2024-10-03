@@ -231,7 +231,7 @@
 		function generateUniqueRandomNumbers(count) {
 			const availableNumbers = Array.from({ length: max - min + 1 }, (_, i) => i + min).filter(n => !history.flat().includes(n));
 			if (availableNumbers.length < count) {
-				alert('没有足够的可用数字来生成新的随机数');
+				alert('没有足够的可用数字来生成新的随机数\n\n这代表着您已经生成了 {min} 和 {max} 之间的所有数字\n\n请刷新页面以重置或者在历史记录中查看已有数据');
 				return [];
 			}
 			const numbers = [];
