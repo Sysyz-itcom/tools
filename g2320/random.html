@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>随机数生成器</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+		}
+		.box {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			width: 80vw;
+			max-width: 400px;
+			background-color: #fff;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			font-size: 2rem;
+			text-align: center;
+			margin-bottom: 2rem;
+			padding: 1rem;
+		}
+		.number {
+			width: 40%;
+			min-width: 50px;
+			margin: 0.5rem;
+			padding: 1rem;
+			background-color: #f0f0f0;
+			border-radius: 5px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		}
+		.button {
+			display: block;
+			width: 80vw;
+			max-width: 400px;
+			height: 50px;
+			background-color: #2196F3;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			font-size: 1.5rem;
+			text-align: center;
+			text-decoration: none;
+			line-height: 50px;
+			transition: background-color 0.3s ease;
+			margin-bottom: 1rem;
+		}
+		.button:hover {
+			background-color: #0F4C81;
+		}
+		.setting, .history, .toggle {
+			position: fixed;
+			right: 2rem;
+			bottom: 2rem;
+			width: 50px;
+			height: 50px;
+			background-color: #2196F3;
+			border-radius: 50%;
+			color: #fff;
+			font-size: 1.5rem;
+			text-align: center;
+			line-height: 50px;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			transition: background-color 0.3s ease;
+		}
+		.setting:hover, .history:hover, .toggle:hover {
+			background-color: #0F4C81;
+		}
+		.history {
+			bottom: 8rem;
+		}
+		.toggle {
+			bottom: 14rem;
+		}
+		.overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1;
+		}
+		.modal {
+			background-color: #fff;
+			padding: 2rem;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+			max-width: 400px;
+			width: 80vw;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		label {
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		.input-group {
+			display: flex;
+			align-items: center;
+			margin-bottom: 1rem;
+		}
+		.input-group input {
+			width: 100%;
+			padding: 0.5rem;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			text-align: center;
+			margin: 0 0.5rem;
+		}
+		.input-group button {
+			background-color: #ccc;
+			color: #000;
+			border: none;
+			border-radius: 5px;
+			padding: 0.5rem;
+			font-size: 1.2rem;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 30px;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.input-group button:hover {
+			background-color: #aaa;
+		}
+		button {
+			background-color: #2196F3;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			padding: 0.5rem 1rem;
+			font-size: 1.2rem;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+		button:hover {
+			background-color: #0F4C81;
+		}
+		.history-modal {
+			max-height: 80vh;
+			overflow-y: auto;
+		}
+		.history-list {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+		}
+		.history-item {
+			padding: 0.5rem;
+			border-bottom: 1px solid #ddd;
+			font-size: 1.2rem;
+		}
+	</style>
+	<!-- 引入 Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="box" id="number-box">
+			<div class="number" id="number1">0</div>
+			<div class="number" id="number2">0</div>
+			<div class="number" id="number3">0</div>
+		</div>
+		<a href="#" class="button" onclick="generateNumbers()">生成随机数</a>
+	</div>
+	<div class="setting" onclick="openSettings()">
+		<i class="fas fa-cog"></i>
+	</div>
+	<div class="history" onclick="openHistory()">
+		<i class="fas fa-history"></i>
+	</div>
+	<div class="toggle" onclick="navigateToLink()">
+		<i class="fas fa-sync-alt"></i>
+	</div>
+
+	<div class="overlay" id="settings-overlay" style="display: none;">
+		<div class="modal">
+			<h2>设置</h2>
+			<div class="input-group">
+				<button onclick="decrementValue('min')"><i class="fas fa-minus"></i></button>
+				<input type="number" id="min" name="min" required>
+				<button onclick="incrementValue('min')"><i class="fas fa-plus"></i></button>
+			</div>
+			<div class="input-group">
+				<button onclick="decrementValue('max')"><i class="fas fa-minus"></i></button>
+				<input type="number" id="max" name="max" required>
+				<button onclick="incrementValue('max')"><i class="fas fa-plus"></i></button>
+			</div>
+			<button type="button" onclick="saveSettings()">保存</button>
+		</div>
+	</div>
+
+	<div class="overlay" id="history-overlay" style="display: none;">
+		<div class="modal history-modal">
+			<h2>历史记录</h2>
+			<ul id="history-list" class="history-list"></ul>
+			<button onclick="closeHistory()">关闭</button>
+		</div>
+	</div>
+
+	<script>
+		let min = 1;
+		let max = 100;
+		let intervalId;
+		let history = [];
+		let currentNumbers = [];
+		let clickCount = 0;
+
+		function generateUniqueRandomNumbers(count) {
+			const availableNumbers = Array.from({ length: max - min + 1 }, (_, i) => i + min).filter(n => !history.flat().includes(n));
+			if (availableNumbers.length < count) {
+				alert('没有足够的可用数字来生成新的随机数');
+				return [];
+			}
+			const numbers = [];
+			while (numbers.length < count) {
+				const index = Math.floor(Math.random() * availableNumbers.length);
+				numbers.push(availableNumbers[index]);
+				availableNumbers.splice(index, 1);
+			}
+			return numbers;
+		}
+
+		function generateNumbers() {
+			const numberEls = document.querySelectorAll('.number');
+			const buttonEl = document.querySelector('.button');
+			
+			if (clickCount === 0) {
+				currentNumbers = generateUniqueRandomNumbers(3);
+				numberEls.forEach((el, index) => {
+					el.innerText = currentNumbers[index];
+				});
+				clickCount++;
+			} else if (clickCount === 1) {
+				history.push(currentNumbers);
+				currentNumbers = generateUniqueRandomNumbers(3);
+				numberEls.forEach((el, index) => {
+					el.innerText = currentNumbers[index];
+				});
+				clickCount = 0;
+			}
+		}
+
+		function openSettings() {
+			const overlayEl = document.getElementById('settings-overlay');
+			overlayEl.style.display = 'flex';
+
+			const minInput = document.getElementById('min');
+			minInput.value = min;
+
+			const maxInput = document.getElementById('max');
+			maxInput.value = max;
+		}
+
+		function decrementValue(id) {
+			const input = document.getElementById(id);
+			input.value = Math.max(parseInt(input.value) - 1, 1); // Ensure value does not go below 1
+		}
+
+		function incrementValue(id) {
+			const input = document.getElementById(id);
+			input.value = parseInt(input.value) + 1;
+		}
+
+		function saveSettings() {
+			const minInput = document.getElementById('min');
+			const maxInput = document.getElementById('max');
+			const newMax = parseInt(maxInput.value);
+			const newMin = parseInt(minInput.value);
+			if (newMax > newMin && (newMax - newMin + 1) >= 3) {
+				max = newMax;
+				min = newMin;
+				history = []; // Reset history when settings change
+				currentNumbers = [];
+				clickCount = 0;
+				closeSettings();
+			} else {
+				alert('最大值必须大于最小值，并且范围至少包含3个不同的数字');
+			}
+		}
+
+		function openHistory() {
+			const overlayEl = document.getElementById('history-overlay');
+			const historyList = document.getElementById('history-list');
+			historyList.innerHTML = ''; // Clear existing list
+			history.forEach((numbers, index) => {
+				const li = document.createElement('li');
+				li.className = 'history-item';
+				li.textContent = `第${index + 1}次: ${numbers.join(', ')}`;
+				historyList.appendChild(li);
+			});
+			overlayEl.style.display = 'flex';
+		}
+
+		function closeHistory() {
+			const overlayEl = document.getElementById('history-overlay');
+			overlayEl.style.display = 'none';
+		}
+
+		function closeSettings() {
+			const overlayEl = document.getElementById('settings-overlay');
+			overlayEl.style.display = 'none';
+		}
+
+		function navigateToLink() {
+			window.location.href = 'https://sysyz-itcom.github.io/tools/random.html'; // 标准模式
+		}
+	</script>
+</body>
+</html>
