@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻聚合页面</title>
+    <style>
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Set the font and background for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* Main container that holds all sections */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Centered title */
+        .main-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Centered main text */
+        .main-text {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Each news section */
+        .news-section {
+            padding: 15px 0;
+        }
+
+        .news-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Ensure paragraphs are responsive and text wraps correctly */
+        .news-section p {
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        /* Style for horizontal line */
+        hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        /* Title list styles */
+        .news-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .news-list li {
+            font-size: 18px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .news-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive design for mobile and desktop */
+        @media (max-width: 768px) {
+            .news-section h2 {
+                font-size: 20px;
+            }
+
+            .news-section p {
+                font-size: 14px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .main-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .news-section h2 {
+                font-size: 28px;
+            }
+
+            .news-section p {
+                font-size: 18px;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .main-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="container">
+        <div class="main-title">
+            欢迎来到新闻聚合页面
+        </div> -->
+
+        <section class="news-section">
+            <ul id="today-headlines">
+            </ul>
+        </section>
+
+        <!-- <hr> -->
+    </div>
+
+    <script>
+        async function displayImageInHeadlines(imageUrl) {
+            try {
+                // 获取今日头条的容器
+                const headlinesContainer = document.querySelector('#today-headlines');
+
+                // 检查容器是否存在
+                if (!headlinesContainer) {
+                    console.error("今日头条容器 (#today-headlines) 没有找到！");
+                    return;
+                }
+                // 创建一个容器来显示图片
+                const imageContainer = document.createElement('div');
+                imageContainer.style.width = '100%';  // 容器宽度为100%
+                imageContainer.style.textAlign = 'center';  // 图片居中
+                document.body.appendChild(imageContainer);
+
+                // 创建一个img元素来展示图片
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;  // 设置图片的URL
+                imgElement.alt = "Image";
+                imgElement.style.maxWidth = '100%';  // 图片宽度最大为容器宽度
+                imgElement.style.height = 'auto';   // 高度自动，保持原始比例
+
+                imageContainer.appendChild(imgElement);
+
+            } catch (error) {
+                console.error("加载图片失败:", error);
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = '加载失败，请稍后再试';
+                document.body.appendChild(errorMessage);
+            }
+        }
+
+        // 调用函数并传入图片URL
+        const imageUrl = 'https://zj.v.api.aa1.cn/api/60s-v2/?cc=邵一IT社';  // 替换为实际的图片URL
+        displayImageInHeadlines(imageUrl);
+    </script>
+</body>
+
+</html>
