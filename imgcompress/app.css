@@ -203,7 +203,7 @@
 
 @font-face {
     font-family: element-icons;
-    src: url(../../assets/fonts/element-icons.ff18efd1.woff) format("woff"), url(../../assets/fonts/element-icons.f1a45d74.ttf) format("truetype");
+    src: url(./css/element-icons.ff18efd1.woff) format("woff"), url(./css/element-icons.f1a45d74.ttf) format("truetype");
     font-weight: 400;
     font-display: "auto";
     font-style: normal
