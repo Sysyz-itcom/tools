@@ -202,13 +202,13 @@
 }
 
 @font-face {
-    font-family: element-icons;
-    src: url(./css/element-icons.ff18efd1.woff) format("woff"), url(./css/element-icons.f1a45d74.ttf) format("truetype");
+    font-family: 'element-icons';
+    src: url('https://sysyz-itcom.github.io/tools/imgcompress/css/element-icons.woff') format("woff"), 
+         url('https://sysyz-itcom.github.io/tools/imgcompress/css/element-icons.ttf') format("truetype");
     font-weight: 400;
-    font-display: "auto";
-    font-style: normal
+    font-display: auto;
+    font-style: normal;
 }
-
 [class*=" el-icon-"],
 [class^=el-icon-] {
     font-family: element-icons !important;
