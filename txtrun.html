@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字幕滚动工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e0e0e0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+            width: 80%;
+            max-width: 600px;
+        }
+        .marquee {
+            background: #000;
+            color: #fff;
+            padding: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .controls > div {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        .controls input {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px;
+            background: #ffffff;
+            box-shadow: 3px 3px 6px #d9d9d9, 
+                       -3px -3px 6px #ffffff;
+        }
+        .controls label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .controls input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .controls input[type="range"] {
+            width: 100%;
+        }
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .fullscreen-btn, .control-btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .control-btn {
+            background: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="marquee">
+            <span id="marquee-text">请输入字幕内容</span>
+        </div>
+        <div class="controls">
+            <div>
+                <label for="text-input"><strong>字幕内容</strong></label>
+                <input type="text" id="text-input" placeholder="请输入字幕内容">
+            </div>
+            <div>
+                <label for="color-select"><strong>文字颜色</strong></label>
+                <input type="color" id="color-select" value="#ffffff">
+            </div>
+            <div>
+                <label for="font-size"><strong>文字大小</strong></label>
+                <input type="range" id="font-size" min="12" max="72" value="24">
+            </div>
+            <div>
+                <label for="speed"><strong>滚动速度</strong></label>
+                <input type="range" id="speed" min="1" max="50" value="10">
+            </div>
+        </div>
+        <div class="control-buttons">
+    <button class="fullscreen-btn" id="fullscreen-btn">滚动内容全屏</button>
+    <button class="control-btn" id="start-btn">开始滚动</button>
+    <button class="control-btn" id="stop-btn">暂停滚动</button>
+</div>
+    </div>
+
+    <script>
+        const marqueeText = document.getElementById('marquee-text');
+        const textInput = document.getElementById('text-input');
+        const colorSelect = document.getElementById('color-select');
+        const fontSize = document.getElementById('font-size');
+        const speed = document.getElementById('speed');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+const startBtn = document.getElementById('start-btn');
+const stopBtn = document.getElementById('stop-btn');
+let isScrolling = true;
+
+        textInput.addEventListener('input', () => {
+            marqueeText.textContent = textInput.value || '请输入字幕内容';
+        });
+
+        colorSelect.addEventListener('input', () => {
+            marqueeText.style.color = colorSelect.value;
+        });
+
+        fontSize.addEventListener('input', () => {
+            marqueeText.style.fontSize = `${fontSize.value}px`;
+        });
+
+        speed.addEventListener('input', () => {
+            marqueeText.style.animationDuration = `${51 - speed.value}s`;
+        });
+
+        fullscreenBtn.addEventListener('click', () => {
+            const marquee = document.querySelector('.marquee');
+            if (!document.fullscreenElement) {
+                marquee.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        startBtn.addEventListener('click', () => {
+            marqueeText.style.animationPlayState = 'running';
+            isScrolling = true;
+        });
+
+        stopBtn.addEventListener('click', () => {
+            marqueeText.style.animationPlayState = 'paused';
+            isScrolling = false;
+        });
+    </script>
+</body>
+</html>
