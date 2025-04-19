@@ -2,9 +2,55 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>邵阳市第一中学信息技术社团工具箱</title>
+    <link href="https://cdn.jsdelivr.net/gh/google/fonts@main/apache/roboto/fonts/ttf/Roboto-Regular.ttf"
+        rel="stylesheet">
     <style>
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-shadow: #000000;
+            --md-sys-color-error: #353535;
+            --md-sys-elevation-level-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--md-sys-color-error);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 4px;
+            box-shadow: var(--md-sys-elevation-level-1);
+            opacity: 0;
+            animation: toast-fade 3s forwards;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        @keyframes toast-fade {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+
+            10%,
+            90% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
         @media screen and (max-width: 768px) {
             .info-box {
                 width: 100%;
@@ -12,81 +58,153 @@
         }
 
         body {
-            /* 维护代码开始 */
             position: relative;
             min-height: 100vh;
-            /* 使用视口高度确保覆盖整个页面 */
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: -moz-scrollbars-none;
+            -ms-overflow-style: none;
         }
 
-        /* 创建一个覆盖整个页面的透明层 */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        .site-footer {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .site-footer p {
+            margin: 8px 0;
+        }
+
+        .site-title {
+            background-color: #6750A4;
+            color: white;
+            padding: 24px 0 20px;
+            width: 100%;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .site-title h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
         .unclickable-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0);
-            /* 完全透明 */
+            background: #353535;
             z-index: 1000;
-            /* 确保它位于其他所有元素之上 */
         }
-
-        /* 维护代码结束 */
 
         .bold-text {
             font-weight: bold;
         }
 
+        /* 按钮样式 */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            max-width: 1200px;
+            margin: 24px auto 0;
+            padding: 0 16px;
+        }
+
         .button {
-            display: inline-block;
-            width: 150px;
-            /* 设置固定宽度 */
+            flex: 1 1 calc(50% - 16px);
+            min-width: 200px;
+            max-width: 300px;
             text-align: center;
-            padding: 10px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            background-color: #70C000;
-            color: #fff;
+            padding: 24px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
             text-decoration: none;
-            border-radius: 5px;
-            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease;
+            border-radius: 8px;
+            box-shadow: var(--md-sys-elevation-level-1);
+            transition: all 0.3s ease, width 0.3s ease;
             font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.1px;
+            position: relative;
+        }
+
+        .button-text {
+            display: block;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .button-category {
+            position: absolute;
+            right: 16px;
+            bottom: 8px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        @media (min-width: 480px) {
+            .button {
+                width: calc(50% - 32px);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .button {
+                width: calc(33.33% - 32px);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .button {
+                width: calc(25% - 32px);
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .button {
+                width: calc(20% - 32px);
+            }
         }
 
         .button:hover {
-            background-color: #437300;
-            text-decoration: none;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: write;
-            /* 设置背景颜色 */
-        }
-
-        body {
-            user-select: none;
-            /* 禁止文字选择 */
-            -webkit-user-select: none;
-            /* 禁止文字选择 */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 85%, black);
+            box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            margin: 0;
+            padding: 16px;
             box-sizing: border-box;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            color: black;
-            /* 设置标题文字颜色 */
         }
 
         .nav {
@@ -105,37 +223,6 @@
             margin-right: 10px;
         }
 
-        .notice {
-            border: 2px solid black;
-            /* 设置边框颜色 */
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 20px;
-            color: black;
-            /* 设置文字颜色 */
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-
-        .info-box {
-            border: 2px solid black;
-            /* 设置信息框边框颜色 */
-            border-radius: 10px;
-            padding: 10px;
-            width: calc(50% - 20px);
-            height: 200px;
-            color: black;
-            /* 设置信息框文字颜色 */
-        }
-
-        .info-gap {
-            width: 20px;
-        }
-
         .extra-info-row {
             display: flex;
             justify-content: space-between;
@@ -143,40 +230,18 @@
 
         .extra-info-box {
             border: 2px solid black;
-            /* 设置信息框边框颜色 */
             border-radius: 10px;
             padding: 10px;
             width: calc(33.33% - 20px);
             height: 200px;
             margin-bottom: 40px;
             color: black;
-            /* 设置信息框文字颜色 */
-        }
-
-        .vertical-info-box {
-            border: 2px solid black;
-            /* 设置竖排信息框边框颜色 */
-            border-radius: 10px;
-            padding: 10px;
-            width: calc(50% - 20px);
-            height: 200px;
-            color: black;
-            /* 设置竖排信息框文字颜色 */
-        }
-
-        .vertical-info-gap {
-            height: 20px;
         }
 
         .footer {
             text-align: center;
             margin-top: 20px;
             color: black;
-            /* 设置页脚文字颜色为 */
-        }
-
-        .info-box {
-            height: auto;
         }
 
         .info-column {
@@ -187,118 +252,185 @@
             text-align: right;
         }
 
-        a:link {
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
             color: white;
-            /* 设置链接文字颜色为 */
             text-decoration: none;
         }
 
-        a:visited {
-            color: white;
-            /* 设置已访问链接文字颜色 */
-            text-decoration: none;
+        a.disabled {
+            color: gray;
+            pointer-events: none;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .version-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .version-content {
+            background: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 90%;
+            white-space: pre-wrap;
+            overflow: hidden;
+            text-align: left;
+            box-shadow: var(--md-sys-elevation-level-1);
+        }
+
+        .close-button {
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .close-button:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>工具</h1>
-        </div>
+    <div class="button-container">
+        <a href="https://sysyz-itcom.github.io/tools/richtext-editor.html" class="button" data-id="t">
+            <span class="button-text">富文本编辑器</span>
+            <span class="button-category">文本</span>
+        </a>
 
-        <div class="notice">
-            <h2><span id="greeting"></span></h2>
-            <p>欢迎使用，你可以在下方查找所需工具。请使用<span class="bold-text">Chrome或者Edge内核</span>打开页面，以便于获得更好的体验。</p>
-            <p><span class="bold-text">Version：H5APP-20250125-Build10</span></p> <!-- Version -->
-            <h6><span class="bold-text">程序页面由 <a href="https://sysyz-itcom.github.io/WindLin" target="_blank" style="color: black">WindLin Studio</a> 提供技术支持</span></h6>
-            <p><span class="bold-text" style="color: #70C000;"></span></p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/markdown.html" class="button" data-id="t">
+            <span class="button-text">Markdown 编辑器</span>
+            <span class="button-category">文本</span>
+        </a>
 
-        <div class="notice">
-            <h2>文字工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/richtext-editor.html" class="button">富文本编辑器</a>
-                <a href="https://sysyz-itcom.github.io/tools/markdown.html" class="button">Markdown编辑器</a>
-                <a href="https://sysyz-itcom.github.io/tools/handwriting.html" class="button">手写字体生成</a>
-            </p>
+        <a href="https://sysyz-itcom.github.io/tools/handwriting.html" class="button" data-id="f">
+            <span class="button-text">手写字体生成</span>
+            <span class="button-category">文本</span>
+        </a>
 
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/wyapi.html" class="button" data-id="f">
+            <span class="button-text">网易云解析</span>
+            <span class="button-category">实用</span>
+        </a>
 
-        <div class="notice">
-            <h2>查询工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/wyapi.html" class="button">网易云解析</a>
-                <a href="https://sysyz-itcom.github.io/tools/ping-server.html" class="button">MC服务器状态</a>
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/ping-server.html" class="button" data-id="t">
+            <span class="button-text">MC 服务器状态</span>
+            <span class="button-category">实用</span>
+        </a>
 
-        <div class="notice">
-            <h2>计算工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/ipv4-subnet-calculator.html"class="button">IPv4子网计算器</a>
+        <a href="https://sysyz-itcom.github.io/tools/ipv4-subnet-calculator.html" class="button" data-id="t">
+            <span class="button-text">IPv4 子网计算器</span>
+            <span class="button-category">实用</span>
+        </a>
 
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/base-converter.html" class="button" data-id="t">
+            <span class="button-text">数字基转换器</span>
+            <span class="button-category">实用</span>
+        </a>
 
-        <div class="notice">
-            <h2>转换工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/base-converter.html" class="button">数字基转换器</a>
-                <a href="https://sysyz-itcom.github.io/tools/color-converter.html" class="button">颜色转换器</a>
-                <a href="https://sysyz-itcom.github.io/tools/base64.html" class="button">Base64编码解码器</a>
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/color-converter.html" class="button" data-id="t">
+            <span class="button-text">颜色转换器</span>
+            <span class="button-category">实用</span>
+        </a>
 
-        <div class="notice">
-            <h2>压缩工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/imgcompress" class="button">本地图片压缩</a>
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/base64.html" class="button" data-id="t">
+            <span class="button-text">Base64 编码解码器</span>
+            <span class="button-category">实用</span>
+        </a>
 
-        <div class="notice">
-            <h2>计时工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/clock.html" class="button">数字时钟</a>
-                <a href="https://sysyz-itcom.github.io/tools/daojishi.html" class="button">倒计时</a>
+        <a href="https://sysyz-itcom.github.io/tools/imgcompress" class="button" data-id="t">
+            <span class="button-text">本地图片压缩</span>
+            <span class="button-category">实用</span>
+        </a>
 
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/clock.html" class="button" data-id="f">
+            <span class="button-text">数字时钟</span>
+            <span class="button-category">生活</span>
+        </a>
 
-        <div class="notice">
-            <h2>一体机适配</h2>
-            <h3>此分类的工具对一体机类的屏幕做了优化，部分工具可能与其它分类相同。</h3>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/writeboard" class="button">轻白板</a>
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/daojishi.html" class="button" data-id="t">
+            <span class="button-text">倒计时</span>
+            <span class="button-category">生活</span>
+        </a>
 
-        <div class="notice">
-            <h2>文件工具</h2>
-            <p>
-                敬请期待……
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/writeboard" class="button" data-id="t">
+            <span class="button-text">轻白板</span>
+            <span class="button-category">授课</span>
+        </a>
 
-        <div class="notice">
-            <h2>课堂辅助</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/random.html" class="button">随机数生成器</a>
-            </p>
-        </div>
+        <a href="https://sysyz-itcom.github.io/tools/random.html" class="button" data-id="t">
+            <span class="button-text">随机数生成器</span>
+            <span class="button-category">授课</span>
+        </a>
 
-        <div class="notice">
-            <h2>其它工具</h2>
-            <p>
-                <a href="https://sysyz-itcom.github.io/tools/adb-online/adb.html" class="button">在线ADB</a>
-            </p>
-        </div>
-        <script src="https://sysyz-itcom.github.io/docs/components/js/time-greeting.js"></script> <!-- 时间问候组件 -->
+        <a href="https://sysyz-itcom.github.io/tools/adb-online/adb.html" class="button" data-id="t">
+            <span class="button-text">在线 ADB</span>
+            <span class="button-category">开发</span>
+        </a>
+    </div>
+    <br>
+    <footer class="site-footer">
+        <p>&copy; <span id="year">2025</span> 邵阳市第一中学信息技术社团</p>
+        <p id="specialVersionId">应用版本：2025042011</p>
+    </footer>
+    <script>
+        function createVersionModal() {
+            const modal = document.createElement('div');
+            modal.className = 'version-modal';
+
+            const content = document.createElement('div');
+            content.className = 'version-content';
+            content.innerHTML = `【Build】\n\n[ver ]H5APP_20250420_Build11\n[b.ver]null\n[up.time]2025-04-20 03:21:12\n[cmd ]null\n[eabi]normal\n[b. ]MjAyNTA0MjAxMTUwMzIxMTI=\n[Create]yuyudifiesh`;
+
+            document.body.style.overflow = 'hidden';
+
+            content.addEventListener('dblclick', () => {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            });
+
+            modal.append(content);
+            document.body.appendChild(modal);
+        }
+        document.querySelectorAll('[data-id], #specialVersionId').forEach(button => {
+            let clickCount = 0;
+            button.addEventListener('click', (e) => {
+                clickCount++;
+                if (clickCount >= 10) {
+                    createVersionModal();
+                    clickCount = 0;
+                }
+                if (button.dataset.id === 'f') {
+                    e.preventDefault();
+                    const toast = document.createElement('div');
+                    toast.className = 'toast-container';
+                    toast.innerHTML = '功能错误，操作终止';
+                    document.body.appendChild(toast);
+                    toast.addEventListener('click', () => toast.remove());
+                    setTimeout(() => toast.remove(), 3000);
+                }
+            });
+        });
+
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
 </body>
 
 </html>
