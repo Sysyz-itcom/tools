@@ -3,88 +3,124 @@
 <head>
 	<title>倒计时</title>
     <style>
-        body {
-            background-color: #f2f2f2;
-            font-family: Arial, sans-serif;
+        @import url('https://cdn.jsdelivr.net/gh/google/fonts@main/apache/roboto/fonts/ttf/Roboto-Regular.ttf');
+
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-surface: #EDE7F6;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-error: #B3261E;
+            --md-sys-color-on-error: #FFFFFF;
         }
 
         body {
-            user-select: none; /* 禁止文字选择 */
-            -webkit-user-select: none; /* 兼容性：禁止文字选择 */
-        }
-
-        .container {
+            background-color: var(--md-sys-color-surface);
+            font-family: 'Roboto', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
 
         .timer-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background-color: var(--md-sys-color-surface);
+            border-radius: 16px;
+            padding: 24px;
             text-align: center;
             max-width: 400px;
         }
 
         .timer-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 24px;
         }
 
         .timer-buttons {
             display: flex;
             justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .timer-button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #f2f2f2;
+            margin: 8px;
+            padding: 12px 24px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
+            width: 150px;
+            width: 150px;
         }
 
         .timer-button:hover {
-            background-color: #e2e2e2;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            background-color: #7D66B3;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .timer-display {
-            font-size: 48px;
-            font-weight: bold;
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 24px;
         }
 
         .end-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff6767;
+            margin-top: 24px;
+            padding: 12px 24px;
+            background-color: var(--md-sys-color-error);
+            color: var(--md-sys-color-on-error);
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            color: white;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
+            width: 150px;
+            width: 150px;
         }
 
         .end-button:hover {
-            background-color: #ff4f4f;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            background-color: #C13028;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        .blink-red-bg {
+            animation: blinkRedBg 1s infinite;
+        }
+
+        @keyframes blinkRedBg {
+            0% { color: red; background-color: var(--md-sys-color-surface); }
+            50% { color: red; background-color: #4B0082; }
+            100% { color: red; background-color: var(--md-sys-color-surface); }
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="timer-card">
-        <h1 class="timer-title">计时器</h1>
+        <h1 class="timer-title"><strong>计时器</strong></h1>
 
         <div class="timer-buttons">
             <button class="timer-button" data-time="300">5分钟</button>
@@ -99,6 +135,8 @@
             <button class="timer-button" data-time="3600">60分钟</button>
             <button class="timer-button" data-time="7200">120分钟</button>
             <button class="timer-button" data-time="10800">180分钟</button>
+            <button class="timer-button" data-time="8">功能测试</button>
+
         </div>
 
         <div class="timer-display">00:00</div>
@@ -114,6 +152,7 @@
     const timerDisplay = document.querySelector('.timer-display');
     const buttons = document.querySelectorAll('.timer-button');
     const endButton = document.querySelector('.end-button');
+
 
     function timer(seconds) {
         clearInterval(countdown);
@@ -139,11 +178,17 @@
     function displayTimeLeft(seconds) {
         if (seconds === 0) {
             timerDisplay.textContent = '00:00';
+            timerDisplay.classList.remove('blink');
         } else {
             const minutes = Math.floor(seconds / 60);
             const remainderSeconds = seconds % 60;
             const display = `${padZero(minutes)}:${padZero(remainderSeconds)}`;
             timerDisplay.textContent = display;
+            if (seconds <= 5) {
+                timerDisplay.classList.add('blink-red-bg');
+            } else {
+                timerDisplay.classList.remove('blink-red-bg');
+            }
         }
     }
 
@@ -162,6 +207,8 @@
     function endTimer() {
         clearInterval(countdown);
         displayTimeLeft(0);
+        timerDisplay.classList.remove('blink');
+        timerDisplay.classList.remove('blink-red-bg');
     }
 </script>
 </body>
