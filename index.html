@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -430,6 +431,36 @@
         });
 
         document.getElementById('year').innerText = new Date().getFullYear();
+
+        // 阻止右键菜单
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 阻止长按
+        document.addEventListener('longpress', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        // 阻止开发者工具
+        function blockDevTools() {
+            function detectDevTool(allow) {
+                if(isNaN(+allow)) return;
+                const start = Date.now();
+                debugger;
+                const end = Date.now();
+                if(isNaN(start) || isNaN(end) || end - start > 100){
+                    window.location.reload();
+                }
+            }
+            console.profile();
+            console.profileEnd();
+            if(console.clear) {
+                console.clear();
+            }
+            setInterval(detectDevTool, 1000);
+        }
+        blockDevTools();
     </script>
 </body>
 
