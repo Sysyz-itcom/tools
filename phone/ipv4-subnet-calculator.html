@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>app.ipv4_subnet_calculator</title>
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            -ms-overflow-style: none;  /* IE 和 Edge */
+            scrollbar-width: none;  /* Firefox */
+            margin: 0;
+            padding: 0;
+            position: relative;
+            /* -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none; */
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #content {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            pointer-events: auto;
+        }
+
+        .top-right-buttons {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+            display: flex;
+            gap: 10px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .top-right-buttons button {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .top-right-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 350px;
+            height: 250px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .modal-content {
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            text-align: left;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-right-buttons">
+        <button id="menuButton"><i class="fa-solid fa-bars"></i></button>
+        <button id="closeButton"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <iframe id="content" src="https://sysyz-itcom.github.io/tools/ipv4-subnet-calculator.html"></iframe>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-title">应用信息</div>
+            <div class="modal-content">
+                <p>应用版本：1.0.0</p>
+                <p>应用描述：PIV4 子网计算器。</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function isIE() {
+            const ua = window.navigator.userAgent;
+            const msie = ua.indexOf('MSIE ');
+            const trident = ua.indexOf('Trident/');
+
+            return (msie > 0) || (trident > 0);
+        }
+
+        if (isIE()) {
+            alert('轻程序不支持您的浏览器');
+        }
+
+        const menuButton = document.getElementById('menuButton');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeButton = document.getElementById('closeButton');
+
+        menuButton.addEventListener('click', function () {
+            modalOverlay.style.display = 'flex';
+        });
+
+        modalOverlay.addEventListener('click', function (event) {
+            if (event.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        closeButton.addEventListener('click', function () {
+            window.history.back();
+        });
+
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        // 触摸事件处理逻辑
+        // document.addEventListener('touchstart', function (e) {
+        //     if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+        //         e.preventDefault();
+        //     }
+        // })
+    </script>
+</body>
+
+</html>
